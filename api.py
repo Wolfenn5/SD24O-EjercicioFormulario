@@ -9,6 +9,12 @@ import uuid # para generar nombres aleatorios unicos como si fuera un hash
 
 # http://127.0.0.1:5500/test.html poner el /test.html cuando se use live server y luego el go live
 
+# El operador elipsisi funciona de la siguiente manera:
+# Form(False) es un parametro opcional con valor predeterminado: False
+# Form(...), es un parametro obligatorio
+
+
+
 # creación del servidor
 app = FastAPI()
 
@@ -82,9 +88,9 @@ async def guarda_usuarios(nombre:str=Form(None), direccion:str=Form(...), checkb
       
 
     if checkbox: # si se marca que es vip 
-        ruta_imagen = f'{home_usuario}/fotos-usuarios-vip/{nombre_archivo}{extension_foto}'
+        ruta_imagen = f'{home_usuario}/fotos-usuarios-vip/{nombre_archivo}{extension_foto}' # la foto se guarda en C:\Users\btosk\fotos-usuarios-vip
     else:
-        ruta_imagen = f'{home_usuario}/fotos-usuarios/{nombre_archivo}{extension_foto}'
+        ruta_imagen = f'{home_usuario}/fotos-usuarios/{nombre_archivo}{extension_foto}' # la foto se guarda en C:\Users\btosk\fotos-usuarios
         
 
     with open(ruta_imagen,"wb") as imagen: # objeto imagen se refiere al archivo que se esta creando justo aqui
