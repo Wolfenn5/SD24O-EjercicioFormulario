@@ -72,22 +72,24 @@ async def guarda_foto(titulo:str=Form(None), descripcion:str=Form(...), foto:Upl
 
 
 # Post para usuarios
-@app.post("usuarios")
-async def guarda_usuarios(nombre:str=Form(None), direccion:str=Form(...), checkbox:bool=Form(None), fotografia:UploadFile=File(...)):
+@app.post("/usuarios")
+async def guarda_usuarios(nombre:str=Form(None), direccion:str=Form(...), checkbox:bool=Form(False), fotografia:UploadFile=File(...)): # con checkbox:bool=Form(False) indica que si no se marca la casilla, por dafault es false
     print("Nombre: ", nombre)
     print("Direccion: ", direccion)
     home_usuario = os.path.expanduser("~") # se obtiene el HOME del usuario
     nombre_archivo = uuid.uuid4() # se obtiene un nombre en formato hexadecimal
     extension_foto = os.path.splitext(fotografia.filename)[1] # una tupla donde el primer elemento es el nombre del archivo y el segundo es la extension del archivo -> [0] nombre_foto   [1] png
+      
 
+    if checkbox: # si se marca que es vip 
+        ruta_imagen = f'{home_usuario}/fotos-usuarios-vip/{nombre_archivo}{extension_foto}'
+    else:
+        ruta_imagen = f'{home_usuario}/fotos-usuarios/{nombre_archivo}{extension_foto}'
+        
 
-    ruta_imagen = f'{home_usuario}/fotos-usuarios-vip/{nombre_archivo}{extension_foto}'
-    ruta_imagen = f'{home_usuario}/fotos-usuarios/{nombre_archivo}{extension_foto}'
-
-    print("Guardando la foto en ", ruta_imagen)
     with open(ruta_imagen,"wb") as imagen: # objeto imagen se refiere al archivo que se esta creando justo aqui
-        contenido = await foto.read() # extraer el contenido, read se hace de forma asincrona (python lo deja corriendo en un hilo)
-        imagen.write(contenido)
+            contenido = await fotografia.read() # extraer el contenido, read se hace de forma asincrona (python lo deja corriendo en un hilo)
+            imagen.write(contenido)
 
     respuesta = {
         "Nombre": nombre,
